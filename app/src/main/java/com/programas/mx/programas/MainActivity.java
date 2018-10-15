@@ -2,9 +2,12 @@ package com.programas.mx.programas;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +23,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,6 +51,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.programas.mx.programas.domain.ProgramasBeneficiarios;
 import com.programas.mx.programas.domain.ProgramasInversion;
@@ -58,6 +63,7 @@ import com.programas.mx.programas.ui.ResultadosAdapterI;
 public class MainActivity extends AppCompatActivity implements OnChartValueSelectedListener, OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
     private TextView mTextMessage;
     private GoogleMap mMap;
+    private Marker marker_mx;
 
     ArrayList<ProgramasBeneficiarios> datasetPB;
     ArrayList<ProgramasInversion> datasetPI;
@@ -449,25 +455,92 @@ public class MainActivity extends AppCompatActivity implements OnChartValueSelec
 
         // Add a marker in Mexico and move the camera.
         LatLng mexico = new LatLng(19.4326009, -99.1333416);
-        mMap.addMarker(new MarkerOptions().position(mexico).title("Ciudad de México, México"));
+        mMap.addMarker(new MarkerOptions().position(mexico).title("Ciudad de México, México").snippet(" Beneficiados: 3,959  "+ "\n Inversión: $1,248,369.00"));
 
         LatLng bc = new LatLng(32.6519, -115.4683);
-        mMap.addMarker(new MarkerOptions().position(bc).title("Baja California, México"));
+        mMap.addMarker(new MarkerOptions().position(bc).title("Baja California, México").snippet(" Beneficiados: 958  "+ "\n Inversión: $286,274.00"));
 
         LatLng bcs = new LatLng(23.25000, -109.75000);
-        mMap.addMarker(new MarkerOptions().position(bcs).title("Baja California Sur, México"));
+        mMap.addMarker(new MarkerOptions().position(bcs).title("Baja California Sur, México").snippet(" Beneficiados: 1,054  "+ "\n Inversión: $639,174.00"));
 
         LatLng ag = new LatLng(21.8823400, -102.2825900);
-        mMap.addMarker(new MarkerOptions().position(ag).title("Aguascalientes, México"));
+        mMap.addMarker(new MarkerOptions().position(ag).title("Aguascalientes, México").snippet(" Beneficiados: 2,584  "+ "\n Inversión: $1,584,274.00"));
 
         LatLng ch = new LatLng(16.75, -93.1167);
-        mMap.addMarker(new MarkerOptions().position(ch).title("Chiapas, México"));
+        mMap.addMarker(new MarkerOptions().position(ch).title("Chiapas, México").snippet(" Beneficiados: 5,843  "+ "\n Inversión: $3,747,739.00"));
 
         LatLng gr = new LatLng(18.775, -103.8375);
-        mMap.addMarker(new MarkerOptions().position(gr).title("Colima, México"));
+        mMap.addMarker(new MarkerOptions().position(gr).title("Colima, México").snippet(" Beneficiados: 2,585  "+ "\n Inversión: $1,004,942.00"));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(mexico));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 4.0f ) );
-    }
+
+
+
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            /**
+             * handle marker click event
+             */
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                // TODO Auto-generated method stub
+
+                Log.w("Click", marker.getTitle().toString());
+
+                if(marker.getTitle().toString().equals("Ciudad de México, México")){
+
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("estado","cdmx");
+                    startActivity(intent);
+                }
+                if(marker.equals(marker_mx)){
+                    Log.w("Click", "MX");
+                    return true;
+                }
+
+
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                    @Override
+                    public View getInfoWindow(Marker arg0) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+
+                        LinearLayout info = new LinearLayout(MainActivity.this);
+                        info.setOrientation(LinearLayout.VERTICAL);
+
+                        TextView title = new TextView(MainActivity.this);
+                        title.setTextColor(Color.BLACK);
+                        title.setGravity(Gravity.CENTER);
+                        title.setTypeface(null, Typeface.BOLD);
+                        title.setText(marker.getTitle());
+
+                        TextView snippet = new TextView(MainActivity.this);
+                        snippet.setTextColor(Color.GRAY);
+                        snippet.setText(marker.getSnippet());
+
+                        info.addView(title);
+                        info.addView(snippet);
+
+                        return info;
+                    }
+                });
+
+                return false;
+
+
+            }
+        });
+
+
+
+
+   }
+
+
 }
 
