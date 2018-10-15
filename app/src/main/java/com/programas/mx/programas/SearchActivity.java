@@ -2,6 +2,7 @@ package com.programas.mx.programas;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,17 +18,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.programas.mx.programas.domain.Programas;
 
 import com.programas.mx.programas.ui.ResultadosAdaptersr;
@@ -65,6 +70,8 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adaptersr;
 
+    //intent
+    String p_estado="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,7 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -91,12 +99,23 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
         //
 
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_search);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("FAB","yes");
+                Intent intent = new Intent(SearchActivity.this, ProgramasActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         imSearch = (ImageButton) findViewById(R.id.imageButton);
         imSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (estado.getSelectedItem().toString().equals("Ciudad de México")){
-                    showresult(mMap);
+                    showresult(mMap,"search");
                 }
                 else{
                     Toast.makeText(SearchActivity.this,"Sin Resultados",Toast.LENGTH_LONG).show();
@@ -222,7 +241,7 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
                 "Atención salud Visual",
                 "Premio Estatal a la Juventud",
                 "Mejoramiento de Vivienda",
-                "Programa de Apoyo a Pequeños Prroductores",
+                "Programa de Apoyo a Pequeños Productores",
                 "Apoyo a la Población Indígena"
         };
 
@@ -352,38 +371,94 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
+        //from mainactivity
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            p_estado = bundle.getString("estado");
+            if (p_estado.equals("cdmx")){
+                showresult(mMap,"create");
+                estado.setSelection(4,true);
+
+            }
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney, Australia, and move the camera.
+        // Add a marker and move the camera.
 
-        LatLng mexico = new LatLng(19.4326009, -99.1333416);
-        mMap.addMarker(new MarkerOptions().position(mexico).title("Ciudad de México, México"));
+        if (p_estado.equals("cdmx")){
 
-        LatLng bc = new LatLng(32.6519, -115.4683);
-        mMap.addMarker(new MarkerOptions().position(bc).title("Baja California, México"));
+            LatLng pmexico = new LatLng(19.4326009, -99.1333416);
+            mMap.addMarker(new MarkerOptions().position(pmexico).title("Ciudad de México, México").snippet(" Beneficiados: 3,959  "+ "\n Inversión: $1,248,369.00"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(pmexico));
 
-        LatLng bcs = new LatLng(23.25000, -109.75000);
-        mMap.addMarker(new MarkerOptions().position(bcs).title("Baja California Sur, México"));
 
-        LatLng ag = new LatLng(21.8823400, -102.2825900);
-        mMap.addMarker(new MarkerOptions().position(ag).title("Aguascalientes, México"));
+        }
+        else{
 
-        LatLng ch = new LatLng(16.75, -93.1167);
-        mMap.addMarker(new MarkerOptions().position(ch).title("Chiapas, México"));
+            LatLng mexico = new LatLng(19.4326009, -99.1333416);
+            mMap.addMarker(new MarkerOptions().position(mexico).title("Ciudad de México, México").snippet(" Beneficiados: 3,959  "+ "\n Inversión: $1,248,369.00"));
 
-        LatLng gr = new LatLng(18.775, -103.8375);
-        mMap.addMarker(new MarkerOptions().position(gr).title("Colima, México"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(mexico));
+            LatLng bc = new LatLng(32.6519, -115.4683);
+            mMap.addMarker(new MarkerOptions().position(bc).title("Baja California, México").snippet(" Beneficiados: 958  "+ "\n Inversión: $286,274.00"));
+
+            LatLng bcs = new LatLng(23.25000, -109.75000);
+            mMap.addMarker(new MarkerOptions().position(bcs).title("Baja California Sur, México").snippet(" Beneficiados: 1,054  "+ "\n Inversión: $639,174.00"));
+
+            LatLng ag = new LatLng(21.8823400, -102.2825900);
+            mMap.addMarker(new MarkerOptions().position(ag).title("Aguascalientes, México").snippet(" Beneficiados: 2,584  "+ "\n Inversión: $1,584,274.00"));
+
+            LatLng ch = new LatLng(16.75, -93.1167);
+            mMap.addMarker(new MarkerOptions().position(ch).title("Chiapas, México").snippet(" Beneficiados: 5,843  "+ "\n Inversión: $3,747,739.00"));
+
+            LatLng gr = new LatLng(18.775, -103.8375);
+            mMap.addMarker(new MarkerOptions().position(gr).title("Colima, México").snippet(" Beneficiados: 2,585  "+ "\n Inversión: $1,004,942.00"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(mexico));
+
+        }
+
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 5.0f ) );
+
+
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                LinearLayout info = new LinearLayout(SearchActivity.this);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(SearchActivity.this);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(SearchActivity.this);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
+
     }
 
 
 
-    public void showresult(GoogleMap googleMap){
+    public void showresult(GoogleMap googleMap,String callfrom){
 
         // inicia chart
         PieChart bchart = (PieChart) findViewById(R.id.bchart);
@@ -393,7 +468,7 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
         entries.add(new PieEntry(570.0f, "Nutrición con Valor"));
         entries.add(new PieEntry(983.0f, "Tu Empleo Formal"));
         entries.add(new PieEntry(482.0f, "Apoyo al Estudiante"));
-        entries.add(new PieEntry(372.0f, "Apoyo a Mujeres Jefas de Familia"));
+        //entries.add(new PieEntry(372.0f, "Apoyo a Mujeres Jefas de Familia"));
 
         PieDataSet set = new PieDataSet(entries, "Miles de Beneficiarios por Programa");
         PieData data = new PieData(set);
@@ -437,7 +512,7 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
         arregloPB.add(new Programas("Nutrición con Valor","570", "Secretaria de Salud","$ 893,125.00","","",""));
         arregloPB.add(new Programas("Tu Empleo Formal","983", "Comite de Apoyo a la Población Vulnerable","$ 564,235.00","","",""));
         arregloPB.add(new Programas("Apoyo al Estudiante","482", "Comisión Nacional para el Desarrollo de los Pueblos Indígenas","$ 635,213.00","","",""));
-        arregloPB.add(new Programas("Apoyo a Mujeres Jefas de Familia","372","Secretaria de Desarrollo Social","$ 357,239.00","","",""));
+        //arregloPB.add(new Programas("Apoyo a Mujeres Jefas de Familia","372","Secretaria de Desarrollo Social","$ 357,239.00","","",""));
 
 
 
@@ -452,13 +527,13 @@ public class SearchActivity extends MainActivity implements OnMapReadyCallback {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-        mMap.clear();
-        LatLng mexico = new LatLng(19.4326009, -99.1333416);
-        mMap.addMarker(new MarkerOptions().position(mexico).title("Ciudad de México, México"));
+        if(callfrom.equals("search")) {
+            mMap.clear();
+            LatLng mexico = new LatLng(19.4326009, -99.1333416);
+            mMap.addMarker(new MarkerOptions().position(mexico).title("Ciudad de México, México"));
 
+        }
 
     }
-
-
 
 }

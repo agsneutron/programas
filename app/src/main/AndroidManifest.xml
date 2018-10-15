@@ -18,9 +18,9 @@
     <application
         android:allowBackup="true"
         android:background="@color/bg"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -39,7 +39,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".Splashscreen"
             android:label="@string/app_name"
@@ -61,7 +62,8 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -93,16 +95,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DetalleActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.programas.mx.programas.ProgramasActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name=".Beneficiarios"
             android:label="@string/title_activity_beneficiarios"
             android:parentActivityName=".ProgramasActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.programas.mx.programas.ProgramasActivity" />
