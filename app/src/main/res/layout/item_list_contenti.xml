@@ -9,7 +9,7 @@
         android:id="@+id/id_text"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:layout_gravity="left"
         android:layout_weight="1"
         android:scrollHorizontally="false"
@@ -20,7 +20,7 @@
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:layout_gravity="right"
         android:textStyle="bold"/>
 </android.support.v7.widget.CardView>

@@ -254,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements OnChartValueSelec
         l2.setFormSize(8f);
         l2.setXEntrySpace(4f);
 
+
         //RV
 
         ArrayList<ProgramasBeneficiarios> arregloPB = new ArrayList<>();
@@ -430,6 +431,7 @@ public class MainActivity extends AppCompatActivity implements OnChartValueSelec
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+            this.finishAffinity();
 
         }
 
